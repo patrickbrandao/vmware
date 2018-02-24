@@ -98,6 +98,7 @@
     REGISTER=yes
     CREATEHD=yes
     NETCONN=""
+    LOCATION=""
 
 # Locais
     TS=$(date '+%s')
@@ -168,6 +169,7 @@
 			echo "Opcoes:"
 			echo " prefix=STR            Prefixo do nome da maquina (nome final: @prefix-@vmid"
 			echo " name=STR              Nome da maquina virtual (opcional, usar prefix e vmid por padrao)"
+			echo " location=STRUUID      UUID de identificacao do hypervisor (evitar dialog de copy/move ao dar play)"
 			echo " cpus=N                Especificar o numero de CPUs (minimo: $MINCPUS)"
 			echo " affinity=x,y,z,w      Especificar afinidade de nucleos"
 			echo " memory=N              Especificar quantidade de RAM em MB (minimo: $MINMEMORY MB)"
@@ -238,6 +240,7 @@
 		[ "x$vle" = "x" ] && continue
 		#echo "VAR=$vname VALUE=$vle"
 		[ "$vname" = "vmid" ] && VMID="$vle" && continue
+		[ "$vname" = "location" -o "$vname" = "loc" ] && LOCATION="$vle" && continue
 		[ "$vname" = "cpus" ] && CPUS="$vle" && continue
 		[ "$vname" = "affinity" ] && AFFINITY="$vle" && continue
 		[ "$vname" = "memory" ] && MEMORY="$vle" && continue
@@ -435,9 +438,14 @@
     echo "$bios_uuid"
 
     # UUID para VM ID
-    echo -n " -> Gerandi ID de VM ...: "
+    echo -n " -> Gerando ID de VM ...: "
     vm_uuid=$(_fake_uuid $VMID_PREFIX)
     echo "$vm_uuid"
+
+    # UUID do hypervisor
+    echo -n " -> Gerando UUID do hypervisor ...: "
+    [ "x$LOCATION" = "x" ] && LOCATION=$(_fake_uuid $VMID_PREFIX)
+    echo "$LOCATION"
 
     # Gerar configuracao de rede 1:1
     tmpeth=/tmp/netconf-nic-$VNAME
@@ -535,7 +543,7 @@ toolScripts.beforeSuspend = "TRUE"
 toolScripts.beforePowerOff = "TRUE"
 tools.syncTime = "FALSE"
 uuid.bios = "$bios_uuid"
-uuid.location = "$bios_uuid"
+uuid.location = "$LOCATION"
 vc.uuid = "$vm_uuid"
 sched.cpu.min = "0"
 sched.cpu.shares = "normal"
