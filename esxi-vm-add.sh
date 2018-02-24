@@ -99,6 +99,7 @@
     CREATEHD=yes
     NETCONN=""
     LOCATION=""
+    VHV=FALSE
 
 # Locais
     TS=$(date '+%s')
@@ -252,6 +253,10 @@
 		[ "$vname" = "datastore" -o "$vname" = "path" ] && DATASTORE="$vle" && continue
 		[ "$vname" = "netconn" ] && NETCONN="$NETCONN,$vle" && continue
 		[ "$vname" = "netfind" ] && NETFIND="$vle" && continue
+		if [ "$vname" = "vhv" ]; then
+			VHV=TRUE
+			[ "$vle" = "0" -o "$vle" = "FALSE" -o "$vle" = "false" ] && VHV=FALSE
+		fi
     done
 
 # Critica obvia
@@ -496,6 +501,7 @@ scsi0.present = "TRUE"
 sata0.present = "TRUE"
 usb.present = "TRUE"
 ehci.present = "TRUE"
+vhv.enable = "$VHV"
 EOF
 
 
