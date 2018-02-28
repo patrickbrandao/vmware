@@ -1,0 +1,37 @@
+
+
+# Remover gerencias
+esxcli network ip interface remove --interface-name=vmk1
+esxcli network ip interface remove --interface-name=vmk2
+esxcli network ip interface remove --interface-name=vmk3
+esxcli network ip interface remove --interface-name=vmk4
+esxcli network ip interface remove --interface-name=vmk5
+
+# Remover Port-Groups:
+esxcli network vswitch standard portgroup remove --portgroup-name=vPort0-Gerencia --vswitch-name=vSwitch0
+esxcli network vswitch standard portgroup remove --portgroup-name=vPort1-Gerencia --vswitch-name=vSwitch1
+esxcli network vswitch standard portgroup remove --portgroup-name=vPort2-Gerencia --vswitch-name=vSwitch2
+esxcli network vswitch standard portgroup remove --portgroup-name=vPort3-Gerencia --vswitch-name=vSwitch3
+esxcli network vswitch standard portgroup remove --portgroup-name=vPort4-Gerencia --vswitch-name=vSwitch4
+esxcli network vswitch standard portgroup remove --portgroup-name=vPort5-Gerencia --vswitch-name=vSwitch5
+
+esxcli network vswitch standard portgroup remove --portgroup-name=vPort0-Acesso --vswitch-name=vSwitch0
+esxcli network vswitch standard portgroup remove --portgroup-name=vPort1-Acesso --vswitch-name=vSwitch1
+esxcli network vswitch standard portgroup remove --portgroup-name=vPort2-Acesso --vswitch-name=vSwitch2
+esxcli network vswitch standard portgroup remove --portgroup-name=vPort3-Acesso --vswitch-name=vSwitch3
+esxcli network vswitch standard portgroup remove --portgroup-name=vPort4-Acesso --vswitch-name=vSwitch4
+esxcli network vswitch standard portgroup remove --portgroup-name=vPort5-Acesso --vswitch-name=vSwitch5
+
+esxcli network vswitch standard portgroup remove --portgroup-name=vPort0-Trunk --vswitch-name=vSwitch0
+esxcli network vswitch standard portgroup remove --portgroup-name=vPort1-Trunk --vswitch-name=vSwitch1
+esxcli network vswitch standard portgroup remove --portgroup-name=vPort2-Trunk --vswitch-name=vSwitch2
+esxcli network vswitch standard portgroup remove --portgroup-name=vPort3-Trunk --vswitch-name=vSwitch3
+esxcli network vswitch standard portgroup remove --portgroup-name=vPort4-Trunk --vswitch-name=vSwitch4
+esxcli network vswitch standard portgroup remove --portgroup-name=vPort5-Trunk --vswitch-name=vSwitch5
+
+# Deletar vSwitch:
+esxcli network vswitch standard remove --vswitch-name=vSwitch1
+esxcli network vswitch standard remove --vswitch-name=vSwitch2
+esxcli network vswitch standard remove --vswitch-name=vSwitch3
+esxcli network vswitch standard remove --vswitch-name=vSwitch4
+esxcli network vswitch standard remove --vswitch-name=vSwitch5
