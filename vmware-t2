@@ -58,7 +58,7 @@ esxcli network ip interface tag add -i vmk2 -t Management
 esxcli network ip interface ipv4 set -i vmk1 -I 10.255.0.1XX -N 255.255.255.0 -t static
 
 #************** REDE DE STORAGES - SAN
-esxcli network ip interface tag add -i vmk5 -t Management
+esxcli network ip interface tag add -i vmk1 -t Management
 
 # Colocar IP na porta de gerencia da rede SAN, troque X pelo numero da sua VM
 esxcli network ip interface ipv4 set -i vmk5 -I 10.255.0.X -N 255.255.255.0 -t static
