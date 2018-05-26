@@ -1,0 +1,108 @@
+#
+# Script para preparar VMWare ESXI 6.5 update1
+#
+
+########################################################## REDE:
+
+# Remover pora "VM Network" padrao no vSwitch0
+esxcli network vswitch standard portgroup remove --portgroup-name="VM Network" --vswitch-name=vSwitch0
+
+#************** Criar vSwitch
+# Nao precisa criar o vSwitch0, ele ja vem criado
+# esxcli network vswitch standard add --vswitch-name=vSwitch0
+esxcli network vswitch standard add --vswitch-name=vSwitch1
+esxcli network vswitch standard add --vswitch-name=vSwitchX
+
+#************** Associar interface UPLINK ao vSwitch
+# nao precisa mexer no vmnic0 pois ja fica associado por padrao no vswitch0
+#esxcli network vswitch standard uplink add --uplink-name=vmnic0 --vswitch-name=vSwitch0
+esxcli network vswitch standard uplink add --uplink-name=vmnic1 --vswitch-name=vSwitch1
+
+#************** Ativar JUMBO-FRAME nos vSwitchs
+esxcli network vswitch standard set --vswitch-name=vSwitch0 --mtu=9000
+esxcli network vswitch standard set --vswitch-name=vSwitch1 --mtu=9000
+esxcli network vswitch standard set --vswitch-name=vSwitchX --mtu=9000
+
+#************** Criar port-group acesso (vlan nativa do switch real)
+esxcli network vswitch standard portgroup add --portgroup-name=vPort0-Acesso --vswitch-name=vSwitch0
+esxcli network vswitch standard portgroup add --portgroup-name=vPort1-Acesso --vswitch-name=vSwitch1
+esxcli network vswitch standard portgroup add --portgroup-name=vPortX-Acesso --vswitch-name=vSwitchX
+
+#************** Criar port-group para gerencia
+esxcli network vswitch standard portgroup add --portgroup-name=vPort0-Gerencia --vswitch-name=vSwitch0
+esxcli network vswitch standard portgroup add --portgroup-name=vPort1-Gerencia --vswitch-name=vSwitch1
+esxcli network vswitch standard portgroup add --portgroup-name=vPortX-Gerencia --vswitch-name=vSwitchX
+
+#************** Criar port-group trunk (todas as vlans)
+# Criar port-groups:
+esxcli network vswitch standard portgroup add --portgroup-name=vPort0-Trunk --vswitch-name=vSwitch0
+esxcli network vswitch standard portgroup add --portgroup-name=vPort1-Trunk --vswitch-name=vSwitch1
+esxcli network vswitch standard portgroup add --portgroup-name=vPortX-Trunk --vswitch-name=vSwitchX
+
+# Ativar na vlan 4095 (significa all-vlans + acesso)
+esxcli network vswitch standard portgroup set -p vPort0-Trunk --vlan-id 4095
+esxcli network vswitch standard portgroup set -p vPort1-Trunk --vlan-id 4095
+esxcli network vswitch standard portgroup set -p vPortX-Trunk --vlan-id 4095
+
+#************** Criar interfaces knic, usadas para gerencia, datastore, vmotion, ...
+# Nao precisa criar a vmk0 pois ela ja vem criada
+#esxcli network ip interface add --interface-name=vmk0 --portgroup-name=vPort0-Gerencia
+esxcli network ip interface add --interface-name=vmk1 --portgroup-name=vPort1-Gerencia
+esxcli network ip interface add --interface-name=vmk2 --portgroup-name=vPortX-Gerencia
+
+#esxcli network ip interface tag add -i vmk0 -t Management
+esxcli network ip interface tag add -i vmk1 -t Management
+esxcli network ip interface tag add -i vmk2 -t Management
+
+# IP Gerencia vmk1 -> vPort1-Trunk
+esxcli network ip interface ipv4 set -i vmk1 -I 10.255.0.1XX -N 255.255.255.0 -t static
+
+#************** REDE DE STORAGES - SAN
+esxcli network ip interface tag add -i vmk5 -t Management
+
+# Colocar IP na porta de gerencia da rede SAN, troque X pelo numero da sua VM
+esxcli network ip interface ipv4 set -i vmk5 -I 10.255.0.X -N 255.255.255.0 -t static
+
+# Ativar JUMBO-FRAME para comunicacao com NFS
+esxcli network ip interface set --interface-name=vmk1 --mtu=9000
+
+# Montar NFS:
+esxcli storage nfs add --host=10.255.0.254 -s /mnt/S001V001 -v S001V001
+
+# Listar NFS:
+esxcli storage nfs list
+
+# Desmontar NFS:
+# esxcli storage nfs remove -v S001V001
+
+########################################################## SISTEMA (host):
+
+# Colocar licenca:
+vim-cmd vimsvc/license --set=AAAAA-BBBBB-CCCCC-DDDDD-EEEEE
+
+# Identidade do servidor (troque X pelo numero do servidor, intranet.br pelo seu dominio)
+esxcli system hostname set --fqdn="vmwareX.intranet.br"
+
+# Definir servidor DNS
+esxcli network ip dns server add --server=8.8.8.8
+esxcli network ip dns server add --server=4.2.2.2
+
+# Ativar SNMP
+esxcli system snmp set --communities vmwaresrv
+esxcli system snmp set --enable true
+esxcli system snmp set --syslocation="19.434279,-155.228148" --syscontact="Manda Chuva"
+
+# Liberar Firewall Geral no SNMP:
+esxcli network firewall ruleset set --ruleset-id snmp --allowed-all true
+esxcli network firewall ruleset set --ruleset-id snmp --enabled true
+
+# Liberar Firewall apenas para IP do Monitoramento para acesso ao SNMP:
+esxcli network firewall ruleset set --ruleset-id snmp --allowed-all false
+esxcli network firewall ruleset allowedip add --ruleset-id=snmp --ip-address=172.30.0.0/24
+
+# Ativar Auto-Start
+vim-cmd hostsvc/autostartmanager/update_defaults 20 20 "PowerOff" true
+vim-cmd hostsvc/autostartmanager/enable_autostart true
+vim-cmd hostsvc/autostartmanager/get_defaults
+
+
