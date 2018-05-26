@@ -20,19 +20,6 @@ esxcli network vswitch standard add --vswitch-name=vSwitch7
 esxcli network vswitch standard add --vswitch-name=vSwitch8
 esxcli network vswitch standard add --vswitch-name=vSwitch9
 
-
-#************** Ativar JUMBO-FRAME nos vSwitchs
-esxcli network vswitch standard set --vswitch-name=vSwitch0 --mtu=9000
-esxcli network vswitch standard set --vswitch-name=vSwitch1 --mtu=9000
-esxcli network vswitch standard set --vswitch-name=vSwitch2 --mtu=9000
-esxcli network vswitch standard set --vswitch-name=vSwitch3 --mtu=9000
-esxcli network vswitch standard set --vswitch-name=vSwitch4 --mtu=9000
-esxcli network vswitch standard set --vswitch-name=vSwitch5 --mtu=9000
-esxcli network vswitch standard set --vswitch-name=vSwitch6 --mtu=9000
-esxcli network vswitch standard set --vswitch-name=vSwitch7 --mtu=9000
-esxcli network vswitch standard set --vswitch-name=vSwitch8 --mtu=9000
-esxcli network vswitch standard set --vswitch-name=vSwitch9 --mtu=9000
-
 #************** Associar interface UPLINK ao vSwitch
 # nao precisa mexer no vmnic0 pois ja fica associado por padrao no vswitch0
 #esxcli network vswitch standard uplink add --uplink-name=vmnic0 --vswitch-name=vSwitch0
@@ -46,6 +33,17 @@ esxcli network vswitch standard uplink add --uplink-name=vmnic7 --vswitch-name=v
 esxcli network vswitch standard uplink add --uplink-name=vmnic8 --vswitch-name=vSwitch8
 esxcli network vswitch standard uplink add --uplink-name=vmnic9 --vswitch-name=vSwitch9
 
+#************** Ativar JUMBO-FRAME nos vSwitchs
+esxcli network vswitch standard set --vswitch-name=vSwitch0 --mtu=9000
+esxcli network vswitch standard set --vswitch-name=vSwitch1 --mtu=9000
+esxcli network vswitch standard set --vswitch-name=vSwitch2 --mtu=9000
+esxcli network vswitch standard set --vswitch-name=vSwitch3 --mtu=9000
+esxcli network vswitch standard set --vswitch-name=vSwitch4 --mtu=9000
+esxcli network vswitch standard set --vswitch-name=vSwitch5 --mtu=9000
+esxcli network vswitch standard set --vswitch-name=vSwitch6 --mtu=9000
+esxcli network vswitch standard set --vswitch-name=vSwitch7 --mtu=9000
+esxcli network vswitch standard set --vswitch-name=vSwitch8 --mtu=9000
+esxcli network vswitch standard set --vswitch-name=vSwitch9 --mtu=9000
 
 #************** Criar port-group acesso (vlan nativa do switch real)
 esxcli network vswitch standard portgroup add --portgroup-name=vPort0-Acesso --vswitch-name=vSwitch0
