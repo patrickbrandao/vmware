@@ -15,6 +15,11 @@ esxcli network vswitch standard add --vswitch-name=vSwitch2
 esxcli network vswitch standard add --vswitch-name=vSwitch3
 esxcli network vswitch standard add --vswitch-name=vSwitch4
 esxcli network vswitch standard add --vswitch-name=vSwitch5
+esxcli network vswitch standard add --vswitch-name=vSwitch6
+esxcli network vswitch standard add --vswitch-name=vSwitch7
+esxcli network vswitch standard add --vswitch-name=vSwitch8
+esxcli network vswitch standard add --vswitch-name=vSwitch9
+
 
 #************** Ativar JUMBO-FRAME nos vSwitchs
 esxcli network vswitch standard set --vswitch-name=vSwitch0 --mtu=9000
@@ -23,6 +28,10 @@ esxcli network vswitch standard set --vswitch-name=vSwitch2 --mtu=9000
 esxcli network vswitch standard set --vswitch-name=vSwitch3 --mtu=9000
 esxcli network vswitch standard set --vswitch-name=vSwitch4 --mtu=9000
 esxcli network vswitch standard set --vswitch-name=vSwitch5 --mtu=9000
+esxcli network vswitch standard set --vswitch-name=vSwitch6 --mtu=9000
+esxcli network vswitch standard set --vswitch-name=vSwitch7 --mtu=9000
+esxcli network vswitch standard set --vswitch-name=vSwitch8 --mtu=9000
+esxcli network vswitch standard set --vswitch-name=vSwitch9 --mtu=9000
 
 #************** Associar interface UPLINK ao vSwitch
 # nao precisa mexer no vmnic0 pois ja fica associado por padrao no vswitch0
@@ -32,6 +41,11 @@ esxcli network vswitch standard uplink add --uplink-name=vmnic2 --vswitch-name=v
 esxcli network vswitch standard uplink add --uplink-name=vmnic3 --vswitch-name=vSwitch3
 esxcli network vswitch standard uplink add --uplink-name=vmnic4 --vswitch-name=vSwitch4
 esxcli network vswitch standard uplink add --uplink-name=vmnic5 --vswitch-name=vSwitch5
+esxcli network vswitch standard uplink add --uplink-name=vmnic6 --vswitch-name=vSwitch6
+esxcli network vswitch standard uplink add --uplink-name=vmnic7 --vswitch-name=vSwitch7
+esxcli network vswitch standard uplink add --uplink-name=vmnic8 --vswitch-name=vSwitch8
+esxcli network vswitch standard uplink add --uplink-name=vmnic9 --vswitch-name=vSwitch9
+
 
 #************** Criar port-group acesso (vlan nativa do switch real)
 esxcli network vswitch standard portgroup add --portgroup-name=vPort0-Acesso --vswitch-name=vSwitch0
@@ -40,6 +54,11 @@ esxcli network vswitch standard portgroup add --portgroup-name=vPort2-Acesso --v
 esxcli network vswitch standard portgroup add --portgroup-name=vPort3-Acesso --vswitch-name=vSwitch3
 esxcli network vswitch standard portgroup add --portgroup-name=vPort4-Acesso --vswitch-name=vSwitch4
 esxcli network vswitch standard portgroup add --portgroup-name=vPort5-Acesso --vswitch-name=vSwitch5
+esxcli network vswitch standard portgroup add --portgroup-name=vPort6-Acesso --vswitch-name=vSwitch6
+esxcli network vswitch standard portgroup add --portgroup-name=vPort7-Acesso --vswitch-name=vSwitch7
+esxcli network vswitch standard portgroup add --portgroup-name=vPort8-Acesso --vswitch-name=vSwitch8
+esxcli network vswitch standard portgroup add --portgroup-name=vPort9-Acesso --vswitch-name=vSwitch9
+
 
 #************** Criar port-group para gerencia
 esxcli network vswitch standard portgroup add --portgroup-name=vPort0-Gerencia --vswitch-name=vSwitch0
@@ -48,6 +67,10 @@ esxcli network vswitch standard portgroup add --portgroup-name=vPort2-Gerencia -
 esxcli network vswitch standard portgroup add --portgroup-name=vPort3-Gerencia --vswitch-name=vSwitch3
 esxcli network vswitch standard portgroup add --portgroup-name=vPort4-Gerencia --vswitch-name=vSwitch4
 esxcli network vswitch standard portgroup add --portgroup-name=vPort5-Gerencia --vswitch-name=vSwitch5
+esxcli network vswitch standard portgroup add --portgroup-name=vPort6-Gerencia --vswitch-name=vSwitch6
+esxcli network vswitch standard portgroup add --portgroup-name=vPort7-Gerencia --vswitch-name=vSwitch7
+esxcli network vswitch standard portgroup add --portgroup-name=vPort8-Gerencia --vswitch-name=vSwitch8
+esxcli network vswitch standard portgroup add --portgroup-name=vPort9-Gerencia --vswitch-name=vSwitch9
 
 #************** Criar port-group trunk (todas as vlans)
 # Criar port-groups:
@@ -57,6 +80,10 @@ esxcli network vswitch standard portgroup add --portgroup-name=vPort2-Trunk --vs
 esxcli network vswitch standard portgroup add --portgroup-name=vPort3-Trunk --vswitch-name=vSwitch3
 esxcli network vswitch standard portgroup add --portgroup-name=vPort4-Trunk --vswitch-name=vSwitch4
 esxcli network vswitch standard portgroup add --portgroup-name=vPort5-Trunk --vswitch-name=vSwitch5
+esxcli network vswitch standard portgroup add --portgroup-name=vPort6-Trunk --vswitch-name=vSwitch6
+esxcli network vswitch standard portgroup add --portgroup-name=vPort7-Trunk --vswitch-name=vSwitch7
+esxcli network vswitch standard portgroup add --portgroup-name=vPort8-Trunk --vswitch-name=vSwitch8
+esxcli network vswitch standard portgroup add --portgroup-name=vPort9-Trunk --vswitch-name=vSwitch9
 # Ativar na vlan 4095 (significa all-vlans + acesso)
 esxcli network vswitch standard portgroup set -p vPort0-Trunk --vlan-id 4095
 esxcli network vswitch standard portgroup set -p vPort1-Trunk --vlan-id 4095
@@ -64,6 +91,10 @@ esxcli network vswitch standard portgroup set -p vPort2-Trunk --vlan-id 4095
 esxcli network vswitch standard portgroup set -p vPort3-Trunk --vlan-id 4095
 esxcli network vswitch standard portgroup set -p vPort4-Trunk --vlan-id 4095
 esxcli network vswitch standard portgroup set -p vPort5-Trunk --vlan-id 4095
+esxcli network vswitch standard portgroup set -p vPort6-Trunk --vlan-id 4095
+esxcli network vswitch standard portgroup set -p vPort7-Trunk --vlan-id 4095
+esxcli network vswitch standard portgroup set -p vPort8-Trunk --vlan-id 4095
+esxcli network vswitch standard portgroup set -p vPort9-Trunk --vlan-id 4095
 
 #************** Criar interfaces knic, usadas para gerencia, datastore, vmotion, ...
 # Nao precisa criar a vmk0 pois ela ja vem criada
@@ -73,6 +104,10 @@ esxcli network ip interface add --interface-name=vmk2 --portgroup-name=vPort2-Ge
 esxcli network ip interface add --interface-name=vmk3 --portgroup-name=vPort3-Gerencia
 esxcli network ip interface add --interface-name=vmk4 --portgroup-name=vPort4-Gerencia
 esxcli network ip interface add --interface-name=vmk5 --portgroup-name=vPort5-Gerencia
+esxcli network ip interface add --interface-name=vmk6 --portgroup-name=vPort6-Gerencia
+esxcli network ip interface add --interface-name=vmk7 --portgroup-name=vPort7-Gerencia
+esxcli network ip interface add --interface-name=vmk8 --portgroup-name=vPort8-Gerencia
+esxcli network ip interface add --interface-name=vmk9 --portgroup-name=vPort9-Gerencia
 
 #esxcli network ip interface tag add -i vmk0 -t Management
 esxcli network ip interface tag add -i vmk1 -t Management
@@ -80,6 +115,10 @@ esxcli network ip interface tag add -i vmk2 -t Management
 esxcli network ip interface tag add -i vmk3 -t Management
 esxcli network ip interface tag add -i vmk4 -t Management
 esxcli network ip interface tag add -i vmk5 -t Management
+esxcli network ip interface tag add -i vmk6 -t Management
+esxcli network ip interface tag add -i vmk7 -t Management
+esxcli network ip interface tag add -i vmk8 -t Management
+esxcli network ip interface tag add -i vmk9 -t Management
 
 
 #************** REDE DE STORAGES - SAN
