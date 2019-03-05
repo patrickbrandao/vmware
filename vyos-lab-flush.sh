@@ -16,8 +16,8 @@ echo "# - Unused Port-groups: $upgc"
 
 # 2 - Apagar os port-groups Student
 for reg in $(cat /tmp/unused-pglist); do
-  vsw=$(echo $reg | cut -f1 -d'|')
-  pgn=$(echo $reg | cut -f2 -d'|')
+  pgn=$(echo $reg | cut -f1 -d'|')
+  vsw=$(echo $reg | cut -f2 -d'|')
   vmc=$(echo $reg | cut -f3 -d'|')
   vid=$(echo $reg | cut -f4 -d'|')
   echo "# vSwitch [$vsw] port-group [$pgn] vms[$vmc] vlan-id[$vid]"
