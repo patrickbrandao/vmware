@@ -15,13 +15,23 @@ upgc=$(cat /tmp/unused-pglist | wc -l)
 echo "# - Unused Port-groups: $upgc"
 
 # 2 - Apagar os port-groups Student
+echo "# Apagando port-groups"
 for reg in $(cat /tmp/unused-pglist); do
   pgn=$(echo $reg | cut -f1 -d'|')
   vsw=$(echo $reg | cut -f2 -d'|')
   vmc=$(echo $reg | cut -f3 -d'|')
   vid=$(echo $reg | cut -f4 -d'|')
-  echo "# vSwitch [$vsw] port-group [$pgn] vms[$vmc] vlan-id[$vid]"
+  echo "# -- vSwitch [$vsw] port-group [$pgn] vms[$vmc] vlan-id[$vid]"
   echo "esxcli network vswitch standard portgroup remove --portgroup-name='$pgn' --vswitch-name=$vsw"
+  echo
+done
+
+# 3 - Apagar vSwitchs de Students
+echo "# Apagando vswitchs"
+for vsw in $( cat /tmp/unused-pglist | cut -f2 -d'|' | sort -u); do
+  echo "# -- vSwitch [$vsw]"
+  echo "esxcli network vswitch standard remove --vswitch-name=$vsw"
+  echo
 done
 
 # Fim
