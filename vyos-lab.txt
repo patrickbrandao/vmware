@@ -77,6 +77,13 @@ done
   echo
 
 # Criar R1 e R2 de todos os alunos
+# Sequencias a serem trocadas no VMX:
+#> zz : numero da turma (01, 02, 03, 04, ...)
+#> yy : numero do aluno (01 a 99)
+#> ww : numero do roteador (R1, R2, R3, ...)
+#> xx : numero do roteador (numerico, 01, 02, 03, ...)
+#> ttt : numero do aluno com 3 digitos (001 a 999)
+#
 # - Copiar VHD de todos
 vhd="/vmfs/volumes/SSD/VHDs/vyos-1.2.0-crux.vmdk"
 
