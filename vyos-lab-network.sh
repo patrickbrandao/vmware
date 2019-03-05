@@ -32,7 +32,7 @@ echo "# - numflist: $numflist"
 
 # Criar vSwitch para cada aluno
 for num in $num2list; do
-  sw=vStudent-G$group2-$num
+  sw=vStudent-T$group2-A$num
   echo "# vSwitch: $sw"
   echo "esxcli network vswitch standard add --vswitch-name=$sw"
   echo "esxcli network vswitch standard set --vswitch-name=$sw --mtu=9000"
@@ -96,7 +96,7 @@ for x in $numflist; do
 
   # - R1 - Registrar
   echo "# - R1 - Registrar"
-  echo "vim-cmd solo/registervm $vm_dir_r1"
+  echo "vim-cmd solo/registervm $vmx_r1"
   echo
   echo
 
