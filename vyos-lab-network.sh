@@ -1,5 +1,24 @@
 #!/bin/sh
 
+_get_vmx_opt(){ egrep "$2" "$1" | head -1 | cut -f2 -d'"'; }
+_rand_md5(){ head -c 100 /dev/urandom  | md5sum | awk '{print $1}'; }
+_renew_uuid(){
+  vmxfile="$1"
+  # Identidade e localizacao da VM
+  srcuuidbios=$(_get_vmx_opt $vmxfile "uuid.bios")
+  p1=$(echo $srcuuidbios | cut -f1,2 -d' ')
+  tmp=$(_rand_md5)
+  a0=$(echo $tmp | cut -b16-17); a1=$(echo $tmp | cut -b18-19)               
+  a2=$(echo $tmp | cut -b20-21); a3=$(echo $tmp | cut -b22-23)
+  a4=$(echo $tmp | cut -b24-25); a5=$(echo $tmp | cut -b26-27)
+  b0=$(echo $tmp | cut -b1-2); b1=$(echo $tmp | cut -b3-4)
+  b2=$(echo $tmp | cut -b5-6); b3=$(echo $tmp | cut -b7-8)
+  b4=$(echo $tmp | cut -b9-10); b5=$(echo $tmp | cut -b11-12)
+  b6=$(echo $tmp | cut -b13-14); b7=$(echo $tmp | cut -b15-16)
+  dstuuidbios=$(echo "$p1 $a0 $a1 $a2 $a3 $a4 $a5-$b1 $b2 $b3 $b4 $b5 $b6 $b7")
+  echo "$dstuuidbios"
+}
+
 #
 # Gerar comandos para criar laboratorio de turma do curso VyOS TOTAL
 #
@@ -72,13 +91,20 @@ for x in $numflist; do
   vm_dir_r1="$storage/$name_r1"
   vhd_r1="$vm_dir_r1/sda.vmdk"
   vmx_r1="$vm_dir_r1/$name_r1.vmx"
+  uuid_r1=$(_renew_uuid $vmxr1)
 
-  name_r2="VyOS-T$group2-A$n2-R2"
-  vm_dir_r2="$storage/$name_r2"
-  vhd_r2="$vm_dir_r2/sda.vmdk"
-  vmx_r2="$vm_dir_r2/$name_r2.vmx"
+  #- name_r2="VyOS-T$group2-A$n2-R2"
+  #- vm_dir_r2="$storage/$name_r2"
+  #- vhd_r2="$vm_dir_r2/sda.vmdk"
+  #- vmx_r2="$vm_dir_r2/$name_r2.vmx"
+  #- uuid_r2=$(_renew_uuid $vmxr2)
 
-  echo "# - R1 - $vm_dir_r1 vhd $vhd_r1"
+  echo "# - R1"
+  echo "# -> name_r1......: $name_r1"
+  echo "# -> vm_dir_r1....: $vm_dir_r1"
+  echo "# -> vhd_r1.......: $vhd_r1"
+  echo "# -> vmx_r1.......: $vmx_r1"
+  echo "# -> uuid_r1......: $uuid_r1"
   echo "mkdir -p $vm_dir_r1"
   echo
 
