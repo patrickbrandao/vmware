@@ -1,21 +1,46 @@
 #
 # Gerar comandos para criar laboratorio de turma do curso VyOS TOTAL
 #
+# Turma:
+group="$1"
+[ "x$group" = "x" ] && group=1
+group2="$group"
+[ "$group" -lt 10 ] && group2="0$group"
+group3="00$group"
+[ "$group" -lt 100 ] && group3="0$group"
+[ "$group" -lt 10 ] && group3="00$group"
+echo "# Group:"
+echo "# - group: $group"
+echo "# - group2: $group2"
+echo "# - group3: $group3"
+
 
 # Criar lista numerada de alunos de 001 a 099
 students="$1"
 [ "x$students" = "x" ] && students=99
 numlist=""
+num2list=""
+num3list=""
+numflist=""
 for n in $(seq 1 1 $students); do
-  num="$n"
-  [ "$n" -lt 100 ] && num="0$n"
-  [ "$n" -lt 10 ] && num="00$n"
-  numlist="$numlist $num"
+  num3="$n"
+  [ "$n" -lt 100 ] && num3="0$n"
+  [ "$n" -lt 10 ] && num3="00$n"
+  num2="$n"
+  [ "$n" -lt 10 ] && num2="0$n"
+  numlist="$numlist $n"
+  num2list="$num2list $num2"
+  num3list="$num3list $num3"
+  numflist="$numflist $n:$num2:$num3"
 done
-echo "# Students list: $numlist"
+echo "# Students list:"
+echo "# - numlist: $numlist"
+echo "# - num2list: $num2list"
+echo "# - num3list: $num3list"
+echo "# - numflist: $numflist"
 
 # Criar vSwitch para cada aluno
-for num in $numlist; do
+for num in $num3list; do
   sw=vStudent-$num
   echo "# vSwitch: $sw"
   echo "esxcli network vswitch standard add --vswitch-name=$sw"
@@ -86,7 +111,14 @@ done
 #
 # - Copiar VHD de todos
 vhd="/vmfs/volumes/SSD/VHDs/vyos-1.2.0-crux.vmdk"
-
+vmxr1="/vmfs/volumes/SSD/VMXs/VyOS-R1.vmx"
+vmxr2="/vmfs/volumes/SSD/VMXs/VyOS-R2.vmx"
+for x in $numflist; do
+  n1=$(echo $x | cut -f1 -d:)
+  n2=$(echo $x | cut -f2 -d:)
+  n3=$(echo $x | cut -f3 -d:)
+  echo "N1=$n1 N2=$n2 N3=$n3"
+done
 
 
 
