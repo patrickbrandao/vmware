@@ -17,7 +17,7 @@ echo "# - group3: $group3"
 
 # Criar lista numerada de alunos de 001 a 099
 students="$1"
-[ "x$students" = "x" ] && students=99
+[ "x$students" = "x" ] && students=2
 numlist=""
 num2list=""
 num3list=""
@@ -110,6 +110,7 @@ done
 #> ttt : numero do aluno com 3 digitos (001 a 999)
 #
 # - Copiar VHD de todos
+storage="/vmfs/volumes/SSD"
 vhd="/vmfs/volumes/SSD/VHDs/vyos-1.2.0-crux.vmdk"
 vmxr1="/vmfs/volumes/SSD/VMXs/VyOS-R1.vmx"
 vmxr2="/vmfs/volumes/SSD/VMXs/VyOS-R2.vmx"
@@ -117,7 +118,27 @@ for x in $numflist; do
   n1=$(echo $x | cut -f1 -d:)
   n2=$(echo $x | cut -f2 -d:)
   n3=$(echo $x | cut -f3 -d:)
-  echo "N1=$n1 N2=$n2 N3=$n3"
+  echo "# Turma $group Aluno $n2"
+  # Criar pasta da VM R1
+  name_r1="VyOS-T$group2-A$n2-R1"
+  vm_dir_r1="$storage/$name_r1"
+  vhd_r1="$vm_dir_r1/sda.vmdk"
+  vmx_r1="$vm_dir_r1/sda.vmdk"
+
+  name_r2="VyOS-T$group2-A$n2-R2"
+  vm_dir_r2="$storage/$name_r2"
+  vhd_r2="$vm_dir_r2/sda.vmdk"
+  vmx_r2="$vm_dir_r2/sda.vmdk"
+
+  echo "# - R1 - $vm_dir_r1 vhd $vhd_r1"
+  echo "mkdir -p $vm_dir_r1"
+  # Clonar VHD
+  [ -f "$vhd_r1" ] && echo "# VHD R1 ja existe: $vhd_r1"
+  [ -f "$vhd_r1" ] || echo "vmkfstools -i $vhd $vhd_r1"
+  # Gerar VMX
+  [ -f "$vmx_r1" ] && echo "# VMX R1 ja existe: $vmx_r1"
+  [ -f "$vmx_r1" ] || echo "cat $vmxr1 | sed 's#zz#$group2#g; s#yy#$n2#g; s#ww#R1#g; s#ttt#$n3#g;'"
+  echo ""
 done
 
 
