@@ -16,7 +16,7 @@ echo "# - group3: $group3"
 
 
 # Criar lista numerada de alunos de 001 a 099
-students="$1"
+students="$2"
 [ "x$students" = "x" ] && students=2
 numlist=""
 num2list=""
@@ -108,6 +108,7 @@ done
 #> ww : numero do roteador (R1, R2, R3, ...)
 #> xx : numero do roteador (numerico, 01, 02, 03, ...)
 #> ttt : numero do aluno com 3 digitos (001 a 999)
+#> xyz : nome da VM
 #
 # - Copiar VHD de todos
 storage="/vmfs/volumes/SSD"
@@ -123,26 +124,37 @@ for x in $numflist; do
   name_r1="VyOS-T$group2-A$n2-R1"
   vm_dir_r1="$storage/$name_r1"
   vhd_r1="$vm_dir_r1/sda.vmdk"
-  vmx_r1="$vm_dir_r1/sda.vmdk"
+  vmx_r1="$vm_dir_r1/$name_r1.vmx"
 
   name_r2="VyOS-T$group2-A$n2-R2"
   vm_dir_r2="$storage/$name_r2"
   vhd_r2="$vm_dir_r2/sda.vmdk"
-  vmx_r2="$vm_dir_r2/sda.vmdk"
+  vmx_r2="$vm_dir_r2/$name_r2.vmx"
 
   echo "# - R1 - $vm_dir_r1 vhd $vhd_r1"
   echo "mkdir -p $vm_dir_r1"
-  # Clonar VHD
+  echo
+
+  # - R1 - Clonar VHD
+  echo "# - R1 - VHD"
   [ -f "$vhd_r1" ] && echo "# VHD R1 ja existe: $vhd_r1"
   [ -f "$vhd_r1" ] || echo "vmkfstools -i $vhd $vhd_r1"
-  # Gerar VMX
+  echo
+
+  # - R1 - Gerar VMX
+  echo "# - R1 - VMX"
   [ -f "$vmx_r1" ] && echo "# VMX R1 ja existe: $vmx_r1"
-  [ -f "$vmx_r1" ] || echo "cat $vmxr1 | sed 's#zz#$group2#g; s#yy#$n2#g; s#ww#R1#g; s#ttt#$n3#g;'"
-  echo ""
+  [ -f "$vmx_r1" ] || echo "cat $vmxr1 | sed 's#xyz#$name_r1#g; s#xx#01#g; s#zz#$group2#g; s#yy#$n2#g; s#ww#R1#g; s#ttt#$n3#g;' > $vmx_r1"
+  echo
+
+  # - R1 - Registrar
+  echo "# - R1 - Registrar"
+  echo "vim-cmd solo/registervm $vm_dir_r1"
+  echo
+  echo
+
 done
 
 
 
-
-
-
+#-
