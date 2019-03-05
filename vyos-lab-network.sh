@@ -1,3 +1,5 @@
+#!/bin/sh
+
 #
 # Gerar comandos para criar laboratorio de turma do curso VyOS TOTAL
 #
@@ -99,3 +101,6 @@ for x in $numflist; do
   echo
 
 done
+
+
+#-
