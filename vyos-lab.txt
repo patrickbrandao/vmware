@@ -1,0 +1,35 @@
+#
+# Gerar comandos para criar laboratorio de turma do curso VyOS TOTAL
+#
+
+# Criar lista numerada de alunos de 001 a 099
+students="$1"
+[ "x$students" = "x" ] && students=99
+numlist=""
+for n in $(seq 1 1 $students); do
+  num="$n"
+  [ "$n" -lt 10 ] && num="00$n"
+  [ "$n" -lt 100 ] && num="0$n"
+  numlist="$numlist $num"
+done
+echo "# Students list: $numlist"
+
+# Criar vSwitch para cada aluno
+for num in $numlist; do
+  sw=vStudent-$num
+  echo "# vSwitch: $sw"
+  echo "esxcli network vswitch standard add --vswitch-name=$sw"
+  echo "esxcli network vswitch standard set --vswitch-name=$sw --mtu=9000"
+  echo "# - Port-group trunk:"
+  echo "    esxcli network vswitch standard portgroup add --portgroup-name=$sw-Trunk --vswitch-name=$sw"
+  echo "    esxcli network vswitch standard portgroup set -p $sw-Trunk --vlan-id 4095"
+  echo "# - local-connections:"
+  echo "    esxcli network vswitch standard portgroup add --portgroup-name=$sw-R1R2 --vswitch-name=$sw"
+  echo "    esxcli network vswitch standard portgroup add --portgroup-name=$sw-R2R3 --vswitch-name=$sw"
+  echo "    esxcli network vswitch standard portgroup set -p $sw-R1R2 --vlan-id 12"
+  echo "    esxcli network vswitch standard portgroup set -p $sw-R2R3 --vlan-id 23"
+  echo
+done
+
+
+#
