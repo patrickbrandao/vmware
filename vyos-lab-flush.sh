@@ -22,14 +22,19 @@ for reg in $(cat /tmp/unused-pglist); do
   vmc=$(echo $reg | cut -f3 -d'|')
   vid=$(echo $reg | cut -f4 -d'|')
   echo "# -- vSwitch [$vsw] port-group [$pgn] vms[$vmc] vlan-id[$vid]"
+  echo "echo '# Apagando vSwitch [$vsw] port-group [$pgn] vms[$vmc] vlan-id[$vid]'"
   echo "esxcli network vswitch standard portgroup remove --portgroup-name='$pgn' --vswitch-name=$vsw"
   echo
 done
 
 # 3 - Apagar vSwitchs de Students
 echo "# Apagando vswitchs"
-for vsw in $( cat /tmp/unused-pglist | cut -f2 -d'|' | sort -u); do
+vswStudent=$(esxcli network vswitch standard list | egrep 'Name:.*Student' | cut -f2 -d: | sort)
+vswUnused=$(cat /tmp/unused-pglist | cut -f2 -d'|' | sort -u)
+vswlist="$vswStudent $vswUnused"
+for vsw in $vswlist; do
   echo "# -- vSwitch [$vsw]"
+  echo "echo '# Apagando vSwitch [$vsw]'"
   echo "esxcli network vswitch standard remove --vswitch-name=$vsw"
   echo
 done
