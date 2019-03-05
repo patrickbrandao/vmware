@@ -34,5 +34,29 @@ for num in $numlist; do
   echo
 done
 
+# vSwitch dos links
+  echo "# vSwitch: Links"
+  echo "esxcli network vswitch standard add --vswitch-name=Links"
+  echo "esxcli network vswitch standard set --vswitch-name=Links --mtu=9000"
+  echo "    esxcli network vswitch standard portgroup add --portgroup-name=Links-Trunk --vswitch-name=Links"
+  echo "    esxcli network vswitch standard portgroup set -p Links-Trunk --vlan-id 4095"
+  echo
+  echo
 
-#
+# vSwitch do IX-SP
+  echo "# vSwitch: IX-SP"
+  echo "esxcli network vswitch standard add --vswitch-name=IX-SP"
+  echo "esxcli network vswitch standard set --vswitch-name=IX-SP --mtu=9000"
+  echo "    esxcli network vswitch standard portgroup add --portgroup-name=IX-SP-Trunk --vswitch-name=IX-SP"
+  echo "    esxcli network vswitch standard portgroup set -p IX-SP-Trunk --vlan-id 4095"
+  echo
+# vSwitch do IX-RJ
+  echo "# vSwitch: IX-RJ"
+  echo "esxcli network vswitch standard add --vswitch-name=IX-RJ"
+  echo "esxcli network vswitch standard set --vswitch-name=IX-RJ --mtu=9000"
+  echo "    esxcli network vswitch standard portgroup add --portgroup-name=IX-RJ-Trunk --vswitch-name=IX-RJ"
+  echo "    esxcli network vswitch standard portgroup set -p IX-RJ-Trunk --vlan-id 4095"
+  echo
+
+
+
