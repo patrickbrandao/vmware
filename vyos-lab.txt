@@ -8,8 +8,8 @@ students="$1"
 numlist=""
 for n in $(seq 1 1 $students); do
   num="$n"
-  [ "$n" -lt 10 ] && num="00$n"
   [ "$n" -lt 100 ] && num="0$n"
+  [ "$n" -lt 10 ] && num="00$n"
   numlist="$numlist $num"
 done
 echo "# Students list: $numlist"
