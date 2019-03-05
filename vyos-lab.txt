@@ -34,6 +34,24 @@ for num in $numlist; do
   echo
 done
 
+# vSwitch de VPS de gerencia em Docker
+  echo "# vSwitch: vDocker"
+  echo "esxcli network vswitch standard add --vswitch-name=vDocker"
+  echo "esxcli network vswitch standard set --vswitch-name=vDocker --mtu=9000"
+  echo "    esxcli network vswitch standard portgroup add --portgroup-name=vDocker-Trunk --vswitch-name=vDocker"
+  echo "    esxcli network vswitch standard portgroup set -p vDocker-Trunk --vlan-id 4095"
+  echo
+  echo
+
+# vSwitch dos clientes PPPoE simulados
+  echo "# vSwitch: vClients"
+  echo "esxcli network vswitch standard add --vswitch-name=vClients"
+  echo "esxcli network vswitch standard set --vswitch-name=vClients --mtu=9000"
+  echo "    esxcli network vswitch standard portgroup add --portgroup-name=vClients-Trunk --vswitch-name=vClients"
+  echo "    esxcli network vswitch standard portgroup set -p vClients-Trunk --vlan-id 4095"
+  echo
+  echo
+
 # vSwitch dos links
   echo "# vSwitch: Links"
   echo "esxcli network vswitch standard add --vswitch-name=Links"
@@ -57,6 +75,14 @@ done
   echo "    esxcli network vswitch standard portgroup add --portgroup-name=IX-RJ-Trunk --vswitch-name=IX-RJ"
   echo "    esxcli network vswitch standard portgroup set -p IX-RJ-Trunk --vlan-id 4095"
   echo
+
+# Criar R1 e R2 de todos os alunos
+# - Copiar VHD de todos
+vhd="/vmfs/volumes/SSD/VHDs/vyos-1.2.0-crux.vmdk"
+
+
+
+
 
 
 
