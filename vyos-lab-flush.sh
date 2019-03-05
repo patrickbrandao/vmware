@@ -10,7 +10,7 @@ esxcli network vswitch standard portgroup list | egrep -v 'Active.Clients' | gre
 pgc=$(cat /tmp/pglist | wc -l)
 echo "# - Student Port-groups: $pgc"
 echo "# - Listando portgroups sem uso"
-cat /tmp/pglist | awk '{print $1"|"$2"|"$3"|"$4}' | egrep '\|0$' > /tmp/unused-pglist
+cat /tmp/pglist | awk '{print $1"|"$2"|"$3"|"$4}' | egrep '\|0|[0-9]+$' > /tmp/unused-pglist
 upgc=$(cat /tmp/unused-pglist | wc -l)
 echo "# - Unused Port-groups: $upgc"
 
