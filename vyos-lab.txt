@@ -20,14 +20,19 @@ for num in $numlist; do
   echo "# vSwitch: $sw"
   echo "esxcli network vswitch standard add --vswitch-name=$sw"
   echo "esxcli network vswitch standard set --vswitch-name=$sw --mtu=9000"
-  echo "# - Port-group trunk:"
+  echo
+  echo "# = Port-group trunk:"
+  echo
   echo "    esxcli network vswitch standard portgroup add --portgroup-name=$sw-Trunk --vswitch-name=$sw"
   echo "    esxcli network vswitch standard portgroup set -p $sw-Trunk --vlan-id 4095"
-  echo "# - local-connections:"
+  echo "# = local-connections:"
+  echo
   echo "    esxcli network vswitch standard portgroup add --portgroup-name=$sw-R1R2 --vswitch-name=$sw"
   echo "    esxcli network vswitch standard portgroup add --portgroup-name=$sw-R2R3 --vswitch-name=$sw"
   echo "    esxcli network vswitch standard portgroup set -p $sw-R1R2 --vlan-id 12"
   echo "    esxcli network vswitch standard portgroup set -p $sw-R2R3 --vlan-id 23"
+  echo
+  echo
   echo
 done
 
