@@ -2,6 +2,7 @@
 
 _get_vmx_opt(){ egrep "$2" "$1" | head -1 | cut -f2 -d'"'; }
 _rand_md5(){ head -c 100 /dev/urandom  | md5sum | awk '{print $1}'; }
+get_vmid_by_name(){ vmname="$1"; vim-cmd vmsvc/getallvms | awk '{print $1"|"$2}' | egrep "^[0-9]+\|$vmname$" | cut -f1 -d'|'; }
 _renew_uuid(){
   # Identidade e localizacao da VM
   tmp=$(_rand_md5)
