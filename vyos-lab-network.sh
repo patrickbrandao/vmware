@@ -36,6 +36,7 @@ for num in $num2list; do
   echo "# vSwitch: $sw"
   echo "esxcli network vswitch standard add --vswitch-name=$sw"
   echo "esxcli network vswitch standard set --vswitch-name=$sw --mtu=9000"
+  echo "esxcli network vswitch standard policy security set --vswitch-name=$sw --allow-mac-change yes --allow-promiscuous yes"
   echo
   echo "# = Port-group trunk:"
   echo "    esxcli network vswitch standard portgroup add --portgroup-name=$sw-Net1 --vswitch-name=$sw"
