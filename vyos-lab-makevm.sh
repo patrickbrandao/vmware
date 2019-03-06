@@ -102,7 +102,8 @@ for x in $numflist; do
 
   # - R1 - Registrar
   echo "# - R1 - Registrar"
-  echo "vim-cmd solo/registervm $vmx_r1"
+  echo "vmid=\$(vim-cmd solo/registervm $vmx_r1)"
+  echo 'vim-cmd vmsvc/power.on $vmid'
   echo
   echo
 
