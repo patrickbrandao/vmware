@@ -33,10 +33,16 @@ echo "# - numflist: $numflist"
 # Criar vSwitch para cada aluno
 for num in $num2list; do
   sw=vStudent-T$group2-A$num
+  vdpg=vDocker-T$group2-A$num
+  vdvid="$group$num"
   echo "# vSwitch: $sw"
   echo "esxcli network vswitch standard add --vswitch-name=$sw"
   echo "esxcli network vswitch standard set --vswitch-name=$sw --mtu=9000"
   echo "esxcli network vswitch standard policy security set --vswitch-name=$sw --allow-mac-change yes --allow-promiscuous yes"
+  echo
+  echo "# = Port-group vlan em vDocker:"
+  echo "    esxcli network vswitch standard portgroup add --portgroup-name=$vdpg --vswitch-name=vDocker"
+  echo "    esxcli network vswitch standard portgroup set -p $vdpg --vlan-id $vdvid"
   echo
   echo "# = Port-group trunk:"
   echo "    esxcli network vswitch standard portgroup add --portgroup-name=$sw-Net1 --vswitch-name=$sw"
