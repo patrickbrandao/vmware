@@ -66,19 +66,29 @@ for x in $numflist; do
   n2=$(echo $x | cut -f2 -d:)
   n3=$(echo $x | cut -f3 -d:)
   echo "# Turma $group Aluno $n2"
-  # Criar pasta da VM R1
+
+# Definicoes do R1
   name_r1="VyOS-T$group2-A$n2-R1"
   vm_dir_r1="$storage/$name_r1"
   vhd_r1="$vm_dir_r1/sda.vmdk"
   vmx_r1="$vm_dir_r1/$name_r1.vmx"
   uuid_r1=$(_renew_uuid $vmxr1)
 
-  #- name_r2="VyOS-T$group2-A$n2-R2"
-  #- vm_dir_r2="$storage/$name_r2"
-  #- vhd_r2="$vm_dir_r2/sda.vmdk"
-  #- vmx_r2="$vm_dir_r2/$name_r2.vmx"
-  #- uuid_r2=$(_renew_uuid $vmxr2)
+# Definicoes do R2
+  name_r2="VyOS-T$group2-A$n2-R2"
+  vm_dir_r2="$storage/$name_r2"
+  vhd_r2="$vm_dir_r2/sda.vmdk"
+  vmx_r2="$vm_dir_r2/$name_r2.vmx"
+  uuid_r2=$(_renew_uuid $vmxr2)
 
+# Definicoes do R3
+  name_r3="VyOS-T$group2-A$n2-R3"
+  vm_dir_r3="$storage/$name_r3"
+  vhd_r3="$vm_dir_r3/sda.vmdk"
+  vmx_r3="$vm_dir_r3/$name_r3.vmx"
+  uuid_r3=$(_renew_uuid $vmxr3)
+
+  #----------------------------------------- R1
   echo "# - R1"
   echo "# -> name_r1......: $name_r1"
   echo "# -> vm_dir_r1....: $vm_dir_r1"
@@ -103,6 +113,64 @@ for x in $numflist; do
   # - R1 - Registrar
   echo "# - R1 - Registrar"
   echo "vmid=\$(vim-cmd solo/registervm $vmx_r1)"
+  echo 'vim-cmd vmsvc/power.on $vmid'
+  echo
+  echo
+
+  #----------------------------------------- R2
+  echo "# - R2"
+  echo "# -> name_r2......: $name_r2"
+  echo "# -> vm_dir_r2....: $vm_dir_r2"
+  echo "# -> vhd_r2.......: $vhd_r2"
+  echo "# -> vmx_r2.......: $vmx_r2"
+  echo "# -> uuid_r2......: $uuid_r2"
+  echo "mkdir -p $vm_dir_r2"
+  echo
+
+  # - R2 - Clonar VHD
+  echo "# - R2 - VHD"
+  [ -f "$vhd_r2" ] && echo "# VHD R2 ja existe: $vhd_r2"
+  [ -f "$vhd_r2" ] || echo "vmkfstools -i $vhd $vhd_r2"
+  echo
+
+  # - R2 - Gerar VMX
+  echo "# - R2 - VMX"
+  [ -f "$vmx_r2" ] && echo "# VMX R2 ja existe: $vmx_r2"
+  [ -f "$vmx_r2" ] || echo "cat $vmxr2 | sed 's#abcd#$uuid_r2#g; s#xyz#$name_r2#g; s#xx#01#g; s#zz#$group2#g; s#yy#$n2#g; s#ww#R1#g; s#ttt#$n3#g;' > $vmx_r2"
+  echo
+
+  # - R2 - Registrar
+  echo "# - R2 - Registrar"
+  echo "vmid=\$(vim-cmd solo/registervm $vmx_r2)"
+  echo 'vim-cmd vmsvc/power.on $vmid'
+  echo
+  echo
+
+  #----------------------------------------- R3
+  echo "# - R3"
+  echo "# -> name_r3......: $name_r2"
+  echo "# -> vm_dir_r3....: $vm_dir_r2"
+  echo "# -> vhd_r3.......: $vhd_r2"
+  echo "# -> vmx_r3.......: $vmx_r2"
+  echo "# -> uuid_r3......: $uuid_r2"
+  echo "mkdir -p $vm_dir_r3"
+  echo
+
+  # - R3 - Clonar VHD
+  echo "# - R3 - VHD"
+  [ -f "$vhd_r3" ] && echo "# VHD R3 ja existe: $vhd_r3"
+  [ -f "$vhd_r3" ] || echo "vmkfstools -i $vhd $vhd_r3"
+  echo
+
+  # - R3 - Gerar VMX
+  echo "# - R3 - VMX"
+  [ -f "$vmx_r3" ] && echo "# VMX R3 ja existe: $vmx_r3"
+  [ -f "$vmx_r3" ] || echo "cat $vmxr3 | sed 's#abcd#$uuid_r3#g; s#xyz#$name_r3#g; s#xx#01#g; s#zz#$group2#g; s#yy#$n2#g; s#ww#R1#g; s#ttt#$n3#g;' > $vmx_r3"
+  echo
+
+  # - R3 - Registrar
+  echo "# - R3 - Registrar"
+  echo "vmid=\$(vim-cmd solo/registervm $vmx_r3)"
   echo 'vim-cmd vmsvc/power.on $vmid'
   echo
   echo
