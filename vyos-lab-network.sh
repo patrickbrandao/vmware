@@ -44,16 +44,21 @@ for num in $num2list; do
   echo "    esxcli network vswitch standard portgroup add --portgroup-name=$vdpg --vswitch-name=vDocker"
   echo "    esxcli network vswitch standard portgroup set -p $vdpg --vlan-id $vdvid"
   echo
-  echo "# = Port-group trunk:"
+  echo "# = Port-group trunk (r1<->r2):"
   echo "    esxcli network vswitch standard portgroup add --portgroup-name=$sw-Net1 --vswitch-name=$sw"
   echo "    esxcli network vswitch standard portgroup set -p $sw-Net1 --vlan-id 4095"
   echo
-  echo "# = local-connections:"
+  echo "# = local-connections (r2<->r3):"
   echo "    esxcli network vswitch standard portgroup add --portgroup-name=$sw-Net2 --vswitch-name=$sw"
   echo "    esxcli network vswitch standard portgroup set -p $sw-Net2 --vlan-id 2"
+  echo
+  echo "# = local-connections (r3<->dedicado):"
+  echo "    esxcli network vswitch standard portgroup add --portgroup-name=$sw-Net3 --vswitch-name=$sw"
+  echo "    esxcli network vswitch standard portgroup set -p $sw-Net3 --vlan-id 3"
   echo
   echo
 done
 
 
 #-
+#
