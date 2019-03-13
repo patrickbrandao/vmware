@@ -1,5 +1,6 @@
 #!/bin/sh
 
+_abort(){ echo; echo "# ABORTADO $@"; echo; exit 9; }
 _get_vmx_opt(){ egrep "$2" "$1" | head -1 | cut -f2 -d'"'; }
 _rand_md5(){ head -c 100 /dev/urandom  | md5sum | awk '{print $1}'; }
 get_vmid_by_name(){ vmname="$1"; vim-cmd vmsvc/getallvms | awk '{print $1"|"$2}' | egrep "^[0-9]+\|$vmname$" | cut -f1 -d'|'; }
@@ -56,11 +57,21 @@ done
 #> ttt : numero do aluno com 3 digitos (001 a 999)
 #> xyz : nome da VM
 #
-# - Copiar VHD de todos
-storage="/vmfs/volumes/SSD"
-vhd="/vmfs/volumes/SSD/VHDs/vyos-1.2.0-crux.vmdk"
-vmxr1="/vmfs/volumes/SSD/VMXs/VyOS-R1.vmx"
-vmxr2="/vmfs/volumes/SSD/VMXs/VyOS-R2.vmx"
+
+# definicoes
+storage="/vmfs/volumes/storage2"
+vhd="/vmfs/volumes/datastore1/VHDs/vyos.vmdk"
+vmxr1="/vmfs/volumes/datastore1/VMXs/vyos-r1.vmx"
+vmxr2="/vmfs/volumes/datastore1/VMXs/vyos-r2.vmx"
+vmxr3="/vmfs/volumes/datastore1/VMXs/vyos-r3.vmx"
+
+[ -d "$storage" ] || _abort "STORAGE $storage nao existe"
+[ -f "$vhd" ] || _abort "VHD $vhd nao existe"
+[ -f "$vmxr1" ] || _abort "Arquivo VMX $vmxr1 nao existe"
+[ -f "$vmxr2" ] || _abort "Arquivo VMX $vmxr2 nao existe"
+[ -f "$vmxr3" ] || _abort "Arquivo VMX $vmxr3 nao existe"
+
+# - Copiar VHD e gerar VM
 for x in $numflist; do
   n1=$(echo $x | cut -f1 -d:)
   n2=$(echo $x | cut -f2 -d:)
