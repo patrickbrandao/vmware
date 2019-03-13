@@ -59,7 +59,7 @@ done
 #
 
 # definicoes
-storage="/vmfs/volumes/storage2"
+storage="/vmfs/volumes/datastore2"
 vhd="/vmfs/volumes/datastore1/VHDs/vyos.vmdk"
 vmxr1="/vmfs/volumes/datastore1/VMXs/vyos-r1.vmx"
 vmxr2="/vmfs/volumes/datastore1/VMXs/vyos-r2.vmx"
