@@ -1,0 +1,48 @@
+#
+# Criacao de vSwitch X para atendimento de
+# maquinas virtuais por meio de roteador virtual
+#
+
+# Criar vSwitchX
+# ------------------------------------------------------------------------------------------------------------
+		esxcli network vswitch standard add --vswitch-name=vSwitchX
+
+		# - Permitir MTU maxima (L3-mtu, L2 mtu calcula-se somando 18 [eth-hdr + vlan] = 9018)
+		esxcli network vswitch standard set --vswitch-name=vSwitchX --mtu=9000
+
+		# - Permitir MAC diferente da VM registrada trafegar no vSwitch
+		#   Necessario para usar driver mac-vlan e clonagem de MAC
+		esxcli network vswitch standard policy security set --vswitch-name=vSwitchX --allow-mac-change yes
+		esxcli network vswitch standard policy security set --vswitch-name=vSwitchX --allow-promiscuous yes
+
+		# - Criar pg padrao com suporte a todas as vlans (4095 = all-vlans = 0-4095)
+		esxcli network vswitch standard portgroup add --portgroup-name=vPortX-Trunk --vswitch-name=vSwitchX
+		esxcli network vswitch standard portgroup set -p vPortX-Trunk --vlan-id 4095
+		esxcli network vswitch standard portgroup policy security set --portgroup-name=vPortX-Trunk --allow-mac-change yes
+		esxcli network vswitch standard portgroup policy security set --portgroup-name=vPortX-Trunk --allow-promiscuous yes
+
+# Criar vSwitchY
+# ------------------------------------------------------------------------------------------------------------
+		esxcli network vswitch standard add --vswitch-name=vSwitchY
+
+		# - Permitir MTU maxima (L3-mtu, L2 mtu calcula-se somando 18 [eth-hdr + vlan] = 9018)
+		esxcli network vswitch standard set --vswitch-name=vSwitchY --mtu=9000
+
+		# - Permitir MAC diferente da VM registrada trafegar no vSwitch
+		#   Necessario para usar driver mac-vlan e clonagem de MAC
+		esxcli network vswitch standard policy security set --vswitch-name=vSwitchY --allow-mac-change yes
+		esxcli network vswitch standard policy security set --vswitch-name=vSwitchY --allow-promiscuous yes
+
+		# - Criar pg padrao com suporte a todas as vlans (4095 = all-vlans = 0-4095)
+		esxcli network vswitch standard portgroup add --portgroup-name=vPortY-Trunk --vswitch-name=vSwitchY
+		esxcli network vswitch standard portgroup set -p vPortY-Trunk --vlan-id 4095
+		esxcli network vswitch standard portgroup policy security set --portgroup-name=vPortY-Trunk --allow-mac-change yes
+		esxcli network vswitch standard portgroup policy security set --portgroup-name=vPortY-Trunk --allow-promiscuous yes
+
+#
+# Caso necessario, crie uma gerencia para o vmware via vSwitchX
+#esxcli network vswitch standard portgroup add --portgroup-name=vPortX-Gerencia --vswitch-name=vSwitchX
+#esxcli network ip interface add --interface-name=vmk1 --portgroup-name=vPortX-Gerencia
+#esxcli network ip interface tag add -i vmk1 -t Management
+#
+
