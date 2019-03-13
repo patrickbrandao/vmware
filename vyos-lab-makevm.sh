@@ -77,6 +77,7 @@ for x in $numflist; do
   n2=$(echo $x | cut -f2 -d:)
   n3=$(echo $x | cut -f3 -d:)
   echo "# Turma $group Aluno $n2"
+  echo "echo '# Turma $group Aluno $n2'"
 
 # Definicoes do R1
   name_r1="VyOS-T$group2-A$n2-R1"
