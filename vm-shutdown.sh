@@ -21,3 +21,6 @@ else
 	[ "$sn" = "0" ] && echo "#> Sucesso."
 	[ "$sn" = "0" ] || echo "#> Falhou, errno $sn"
 fi
+
+
+#
